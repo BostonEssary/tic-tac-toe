@@ -6,7 +6,7 @@ const playerFactory = (name, piece) => {
 }
 
 const GameBoard = () => {
-    const logicBoard = ["X",1,2,3,4,5,6,7,8]
+    const logicBoard = [0,1,2,3,4,5,6,7,8]
 
     const placePiece = (playerPiece, spot, currentBoard) => {
         currentBoard[spot] = playerPiece
@@ -20,6 +20,7 @@ const displayController = () => {
     const drawBoard = (currentBoard) => {
         let count = 0;
         const board = document.getElementById("board")
+
         currentBoard.forEach(piece => {
             let div = document.createElement("div");
             div.setAttribute("data-spot", count)
@@ -60,7 +61,14 @@ const Game = () => {
         currentPlayer = player1
     })
     
+    
+
+    const checkForWinner = () => {
+        
+    }
+
     const switchRound = () => {
+        
         if (roundCount % 2 === 0){
             currentPlayer = player1
         }
@@ -74,15 +82,18 @@ const Game = () => {
             spots[i].addEventListener("click", (e) => {
                 e.target.textContent = currentPlayer.getPiece()
                 game.placePiece(currentPlayer.getPiece(), e.target.dataset.spot, board )
+                switchRound()
+                roundCount++
                 console.log(board)
                 
             })
             console.log("blah")
         }
     }
+
     
     addClickHandler()
-    switchRound()
+    
     
     
     
