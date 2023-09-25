@@ -22,7 +22,8 @@ const displayController = () => {
         const board = document.getElementById("board")
         currentBoard.forEach(piece => {
             let div = document.createElement("div");
-            div.id = count
+            div.setAttribute("data-spot", count)
+            div.id = `spot-${count}`
             div.classList.add("spot")
             if(Number.isInteger(piece)){
                 div.textContent = "test"
@@ -72,7 +73,7 @@ const Game = () => {
         for(i = 0; i < spots.length; i++){
             spots[i].addEventListener("click", (e) => {
                 e.target.textContent = currentPlayer.getPiece()
-                game.placePiece(currentPlayer.getPiece(), e.target.id, board )
+                game.placePiece(currentPlayer.getPiece(), e.target.dataset.spot, board )
                 console.log(board)
                 
             })

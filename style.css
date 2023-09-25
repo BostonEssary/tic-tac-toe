@@ -1,6 +1,35 @@
+#spot-0, #spot-1, #spot-3, #spot-4 {
+    border-bottom: black 8px solid;
+    border-right: black 8px solid;
+}
+
+#spot-2, #spot-5 {
+    border-bottom: black 8px solid;
+}
+#spot-6, #spot-7 {
+    border-right: black 8px solid;
+}
+
+
+
 .spot {
-    width: 200px;
-    height: 200px;
     background-color: lightcoral;
-    margin: 1em;
+    height: 200px;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: xx-large;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 0px;
+    column-gap: 0px;
+}
+
+#board{
+    max-width: 600px;
+    max-height: 600px;
 }
