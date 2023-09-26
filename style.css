@@ -33,3 +33,32 @@
     max-width: 600px;
     max-height: 600px;
 }
+
+#alert-modal {
+    background-color: lightgreen;
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
+    border-radius: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 500px) {
+    .spot {
+        height: 120px;
+    }
+    body {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+   
+}
