@@ -18,6 +18,10 @@ const GameBoard = () => {
         currentBoard[spot] = playerPiece
     }
 
+    const getBoard = (currentBoard) => {
+        return logicBoard
+    }
+
     const getPlacedPiece = (index, currentBoard) => {
         return currentBoard[index]
     }
@@ -54,7 +58,7 @@ const GameBoard = () => {
 
     
 
-    return {logicBoard, placePiece, getPlacedPiece, getXPieces, getOPieces, getEmptySpots}
+    return {logicBoard, placePiece, getPlacedPiece, getXPieces, getOPieces, getEmptySpots, getBoard}
 }
 
 const displayController = () => {
@@ -116,16 +120,30 @@ const Game = () => {
     let player1 = playerFactory("", "X");
     let player2 = playerFactory("Comptuer", "O");
     let game = GameBoard();
-    let board = game.logicBoard
+    let board = game.getBoard()
     let controller = displayController()
     let visualBoard = document.getElementById("board")
     let currentPlayer = player1;
     let spots = document.getElementsByClassName("spot")
     let winningCombos = [[0,1,2], [0,3,6], [0,4,8], [1,4,7], [2,5,8],[2, 4, 6] ,[3, 4, 5], [6,7,8]]
-    let alertModal = document.getElementById("alert-modal")
+    let alertModalContainer = document.getElementById("alert-modal")
+    let alertModal = document.getElementById("alert-modal-text")
+    let resetButton = document.createElement("button")
+    alertModalContainer.append(resetButton)
+    resetButton.textContent = "reset-button"
 
+    resetButton.addEventListener("click", (e) => {
+        
+        for(i = 0; i < spots.length; i++){
+            spots[i].textContent = ""
+            board[i] = i
+        }
     
-
+       alertModalContainer.classList.add("hidden")
+       console.log(board)
+       roundCount = 1
+    })
+    
  
 
     const namesForm = () => {  
@@ -139,7 +157,9 @@ const Game = () => {
     
     const checkForTie = (currentBoard) => {
         if(roundCount >= 9){
-            alert("game is a tie")
+            alertModal.textContent = `Game is a tie`
+            alertModalContainer.classList.remove("hidden")
+            board = game.logicBoard
         }
     }
 
@@ -151,11 +171,12 @@ const Game = () => {
         for (i=0; i < winningCombos.length; i++){
             if (checker(xPieceLocations, winningCombos[i])) {
                 alertModal.textContent = `${player1.getName()} has won`
-                alertModal.classList.remove("hidden")
+                alertModalContainer.classList.remove("hidden")
             }
             else if (checker(oPieceLocations, winningCombos[i])) {
                 alertModal.textContent = `${player2.getName()} has won`
-                alertModal.classList.remove("hidden")
+                alertModalContainer.classList.remove("hidden")
+                board = game.logicBoard
             }
         }
     }
@@ -173,7 +194,9 @@ const Game = () => {
             let visualSpot = document.getElementById(`spot-${move}`)
             visualSpot.textContent = currentPlayer.getPiece();
             game.placePiece(currentPlayer.getPiece(), move, board )
+            checkForWinner(board);
             roundCount++
+            currentPlayer = player1
         }
     }
     
