@@ -127,10 +127,12 @@ const Game = () => {
     let spots = document.getElementsByClassName("spot")
     let winningCombos = [[0,1,2], [0,3,6], [0,4,8], [1,4,7], [2,5,8],[2, 4, 6] ,[3, 4, 5], [6,7,8]]
     let alertModalContainer = document.getElementById("alert-modal")
+    let container = document.getElementById("alert-container")
     let alertModal = document.getElementById("alert-modal-text")
     let resetButton = document.createElement("button")
-    alertModalContainer.append(resetButton)
-    resetButton.textContent = "reset-button"
+    container.append(resetButton)
+    resetButton.textContent = "Reset"
+    resetButton.id = "reset-btn"
 
     resetButton.addEventListener("click", (e) => {
         
