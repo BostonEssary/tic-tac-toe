@@ -1,3 +1,20 @@
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: rgb(227, 193, 82);
+}
+
+.form-div {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+
+}
+
 #spot-0, #spot-1, #spot-3, #spot-4 {
     border-bottom: black 8px solid;
     border-right: black 8px solid;
@@ -20,6 +37,13 @@
     justify-content: center;
     align-items: center;
     font-size: xx-large;
+    
+    
+}
+
+.spot:hover {
+    background-color: rgb(121, 255, 237);
+    transition: background-color .3s ease-in;
 }
 
 .grid {
@@ -32,6 +56,8 @@
 #board{
     max-width: 600px;
     max-height: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #alert-modal {
@@ -49,6 +75,10 @@
 .hidden {
     display: none;
 }
+
+
+
+
 
 @media (max-width: 500px) {
     .spot {

@@ -1,9 +1,15 @@
 const playerFactory = (name, piece) => {
     const getName = () => {return name}
     const getPiece = () => {return piece}
-
-    return {getName, getPiece}
+    const setName = (newName) => {name = newName}
+    const getMove = (emptySpots) => {
+        var move = emptySpots[Math.floor(Math.random()*emptySpots.length)]
+        return move
+    }
+    return {getName, getPiece, setName, getMove}
 }
+
+
 
 const GameBoard = () => {
     const logicBoard = [0,1,2,3,4,5,6,7,8]
@@ -26,6 +32,16 @@ const GameBoard = () => {
         return xPieceIndexes
     }
 
+    const getEmptySpots = (currentBoard) => {
+        const emptySpots = []
+        for(i = 0; i < currentBoard.length; i++){
+            if(Number.isInteger(currentBoard[i])){
+                emptySpots.push(i)
+            }
+        }
+        return emptySpots
+    }
+
     const getOPieces = (currentBoard) => {
         const oPieceIndexes = []
         for(i = 0; i < currentBoard.length; i++){
@@ -36,7 +52,9 @@ const GameBoard = () => {
         return oPieceIndexes
     }
 
-    return {logicBoard, placePiece, getPlacedPiece, getXPieces, getOPieces}
+    
+
+    return {logicBoard, placePiece, getPlacedPiece, getXPieces, getOPieces, getEmptySpots}
 }
 
 const displayController = () => {
@@ -60,25 +78,62 @@ const displayController = () => {
             board.append(div)
             count++
         });
-    }
 
-    return {drawBoard}
+        
+    }
+    const createNameForm = (player, currentBoard) => {
+        let formDiv = document.createElement("div")
+        formDiv.classList.add("form-div")
+        let formHeading = document.createElement("h2")
+        let inputField = document.createElement("INPUT")
+        let submitButton = document.createElement("button")
+        formHeading.textContent = "What is your name, challenger?"
+        submitButton.textContent = "Submit"
+        inputField.setAttribute("type", "text")
+        inputField.id = "name-field"
+        formDiv.append(formHeading)
+        formDiv.append(inputField)
+        formDiv.append(submitButton)
+
+        submitButton.addEventListener("click", (e) => {
+            player.setName(inputField.value)
+            console.log(player.getName())
+            document.getElementById("board").classList.remove("hidden")
+            formDiv.classList.add("hidden")
+            
+    })
+
+        document.body.prepend(formDiv) 
+    }
+    
+    return {drawBoard, createNameForm}
 }
 
 
 
 const Game = () => {
     let roundCount = 1
-    let player1 = playerFactory("Boston", "X");
-    let player2 = playerFactory("Cassie", "O");
+    let player1 = playerFactory("", "X");
+    let player2 = playerFactory("Comptuer", "O");
     let game = GameBoard();
     let board = game.logicBoard
     let controller = displayController()
-    controller.drawBoard(board)
+    let visualBoard = document.getElementById("board")
     let currentPlayer = player1;
     let spots = document.getElementsByClassName("spot")
     let winningCombos = [[0,1,2], [0,3,6], [0,4,8], [1,4,7], [2,5,8],[2, 4, 6] ,[3, 4, 5], [6,7,8]]
     let alertModal = document.getElementById("alert-modal")
+
+    
+
+ 
+
+    const namesForm = () => {  
+        
+        controller.createNameForm(player1)
+        controller.drawBoard(board)
+        
+    }
 
     let checker = (arr, target) => target.every(v => arr.includes(v));
     
@@ -87,30 +142,38 @@ const Game = () => {
             alert("game is a tie")
         }
     }
+
+
     const checkForWinner = (currentBoard) => {
         let xPieceLocations = game.getXPieces(board)
         let oPieceLocations = game.getOPieces(board)
         
         for (i=0; i < winningCombos.length; i++){
             if (checker(xPieceLocations, winningCombos[i])) {
-                alertModal.textContent = "Player 1 has won"
+                alertModal.textContent = `${player1.getName()} has won`
                 alertModal.classList.remove("hidden")
             }
             else if (checker(oPieceLocations, winningCombos[i])) {
-                alert("Player 2 has won")
+                alertModal.textContent = `${player2.getName()} has won`
+                alertModal.classList.remove("hidden")
             }
         }
     }
 
     const switchRound = () => {
-        console.log(roundCount)
         checkForWinner(board);
         checkForTie()
         if (roundCount % 2 === 0){
             currentPlayer = player1
         }
         else {
+            
             currentPlayer = player2
+            let move = player2.getMove(game.getEmptySpots(board))
+            let visualSpot = document.getElementById(`spot-${move}`)
+            visualSpot.textContent = currentPlayer.getPiece();
+            game.placePiece(currentPlayer.getPiece(), move, board )
+            roundCount++
         }
     }
     
@@ -131,7 +194,7 @@ const Game = () => {
             })
         }
     }
-
+    namesForm()
     addClickHandler(board)
     
 }
